@@ -60,10 +60,9 @@ estadisticas_policiales %>%
   ggtitle("Cantidad de delitos por tipo de delito") +
   xlab("Delito") +
   ylab("Cantidad") +
-  coord_flip() +
   theme_gray() 
- 
 ggplotly(ggplot2_estadisticas_policiales) %>% config(locale = 'es')
+
   
   
 
