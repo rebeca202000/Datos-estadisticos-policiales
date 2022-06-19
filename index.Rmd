@@ -46,7 +46,31 @@ options = list(
 
 ```
 
+# Grafico
+```{r grafico, message = FALSE  }
 
+# Cantidad de delitos por tipo de delito
+
+ggplot2_estadisticas_policiales <-
+estadisticas_policiales %>%
+  count(Delito) %>%
+  ggplot(aes(x = reorder(Delito, n), y = n)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  ggtitle("Cantidad de delitos por tipo de delito") +
+  xlab("Delito") +
+  ylab("Cantidad") +
+  coord_flip() +
+  theme_gray() 
+ 
+ggplotly(ggplot2_estadisticas_policiales) %>% config(locale = 'es')
+  
+  
+
+
+
+  
+```
 
 
 
