@@ -45,7 +45,7 @@ options = list(
   language = list(url = '//cdn.datatables.net/plug-ins/1.10.11/i18n/Spanish.json')
 ))
 ```
-# Grafico 1: Cantidad de delitos por tipo de delito
+# Grafico 1: Cantidad de delitos por tipo de delito (barras simples)
 ```{r grafico 1, message = FALSE  }
 # Cantidad de delitos por tipo de delito
 ggplot2_estadisticas_policiales <-
@@ -56,13 +56,13 @@ estadisticas_policiales %>%
   coord_flip() +
   ggtitle("Cantidad de delitos por tipo de delito") +
   xlab("Delito") +
-  ylab("Cantidad") +
+  ylab("Cantidad de delitos") +
   theme_gray() 
 ggplotly(ggplot2_estadisticas_policiales) %>% config(locale = 'es')
 ```
 
-# Grafico 2: Cantidad de delitos por mes
-```{r}
+# Grafico 2: Cantidad de delitos por mes (barras simples)
+```{r ,message = FALSE}
 datos <-
   estadisticas_policiales %>%
   mutate(meses = lubridate::month(Fecha))
@@ -70,7 +70,7 @@ datos <-
 mes <-c("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Setiembre", "Octubre", "Noviembre")
 ```
 
-```{r}
+```{r ,message = FALSE}
 grafico_delitos_meses <-
   datos %>%
   count(meses) %>%
@@ -78,30 +78,46 @@ grafico_delitos_meses <-
   geom_bar(stat = "identity") +
   ggtitle("Cantidad de delitos por mes del año 2021") +
   xlab("Mes") +
-  ylab("Cantidad") +
+  ylab("Cantidad de delitos") +
   coord_flip() +
   theme_gray() 
   
 ggplotly(grafico_delitos_meses)
 ```
 
-# Grafico 3 : Cantidad de delitos por genero 
-```{r}
+# Grafico 3 : Cantidad de delitos por genero (barras apliladas)
+```{r ,message = FALSE}
 delitos_genero <-
   estadisticas_policiales %>%
   ggplot(aes(x = Delito, fill = Genero)) +
   geom_bar(position = "fill") +
   ggtitle("Cantidad de delitos por género") +
   xlab("Delito") +
-  ylab("Cantidad") +
+  ylab("Cantidad de delitos") +
   labs(fill = "Género") +
   coord_flip() +
-  theme_minimal()
+  theme_get()
 
 ggplotly(delitos_genero) %>% config(locale = 'es')
 ```
+# Grafico 4: Cantidad de delitos por Cantones (barras simples)
 
-
+```{r }
+delitos_cantones <-
+  estadisticas_policiales %>%
+  count(Canton) %>%
+  filter(Canton == "SAN JOSE" |
+           Canton == "ALAJUELA" |
+           Canton == "CARTAGO" | Canton == "HEREDIA") %>%
+  ggplot(aes(x = reorder(Canton, n), y = n)) +
+  geom_bar(stat = "identity") +
+  ggtitle("Cantidad de delitos por cantones ") +
+  xlab("Cantones") +
+  ylab("Cantidad de delitos") +
+  coord_flip() +
+  theme_grey()
+ggplotly(delitos_cantones)
+```
 
 
 
