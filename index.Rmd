@@ -1,0 +1,99 @@
+---
+title: "Datos estadisticos policiales 2021"
+author: "Rebeca"
+date: '2022-06-20'
+output: html_document
+code_folding: hide
+---
+
+# Carga de Paquetes de datos
+
+```{r carga paquetes, message = FALSE}
+library(dplyr)
+library(ggplot2)
+library(plotly)
+library(sf)
+library(DT)
+library(readxl)
+library(readr)
+```
+
+# Lectura de datos
+
+```{r lectura de datos,  message = FALSE}
+estadisticas_policiales <-
+  readxl::read_excel("C:/Users/REBECA/Desktop/Datos policiales 2021/estadisticaspoliciales2021.xls")
+```
+
+# Tabla
+
+```{r tabla,  message = FALSE }
+estadisticas_policiales %>%
+  dplyr::select(Delito, Fecha, Victima, Edad, Genero, Provincia, Canton) %>%
+  datatable(colnames = c(
+    "Delito",
+    "Fecha",
+    "Víctima",
+    "Edad",
+    "Género",
+    "Provincia",
+    "Cantón"
+  ),
+options = list(
+  language = list(url = '//cdn.datatables.net/plug-ins/1.10.11/i18n/Spanish.json')
+))
+```
+# Grafico 1
+
+```{r grafico, message = FALSE  }
+# Cantidad de delitos por tipo de delito
+ggplot2_estadisticas_policiales <-
+estadisticas_policiales %>%
+  count(Delito) %>%
+  ggplot(aes(x = reorder(Delito, n), y = n)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  ggtitle("Cantidad de delitos por tipo de delito") +
+  xlab("Delito") +
+  ylab("Cantidad") +
+  theme_gray() 
+ggplotly(ggplot2_estadisticas_policiales) %>% config(locale = 'es')
+```
+
+# Grafico 2
+```{r grafico, message = FALSE}
+
+a <-
+  estadisticas_policiales %>%
+  mutate(meses = lubridate::month(Fecha))
+
+b <-c("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Setiembre", "Octubre", "Noviembre")
+ 
+```
+
+```{r grafico, message = FALSE}
+grafico_delitos_meses <-
+  a %>%
+  count(meses) %>%
+  ggplot(level = level_order, (aes(x = reorder (b, meses), y = n))) +
+  geom_bar(stat = "identity") +
+  ggtitle("Cantidad de delitos por mes del año 2021") +
+  xlab("Mes") +
+  ylab("Cantidad") +
+  coord_flip() +
+  theme_gray() 
+  
+ggplotly(grafico_delitos_meses) %>% config(locale = 'es')
+
+```
+
+
+
+
+
+
+
+
+
+
+
